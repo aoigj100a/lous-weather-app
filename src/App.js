@@ -144,7 +144,6 @@ const App = () => {
   // 原生js fetch API拉取資料
 
   const AUTHORIZATION_KEY = process.env.REACT_APP_AUTHORIZATION_KEY;
-  console.log(AUTHORIZATION_KEY)
   const LOCATION_NAME = '%E8%87%BA%E5%8C%97';
 
   const handleClick = () => {
@@ -153,41 +152,62 @@ const App = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log('data',data)
+        // STEP 1：定義 `locationData` 把回傳的資料中會用到的部分取出來
+        const locationData = data.records.location[0];
+
+        // STEP 2：將風速（WDSD）和氣溫（TEMP）的資料取出
+        const weatherElements = locationData.weatherElement.reduce(
+          (neededElements, item) => {
+            if (['WDSD', 'TEMP'].includes(item.elementName)) {
+              neededElements[item.elementName] = item.elementValue;
+            }
+            return neededElements;
+          },
+          {}
+        );
+
+        // STEP 3：要使用到 React 組件中的資料
+        setCurrentWeather({
+          observationTime: locationData.time.obsTime,
+          locationName: locationData.locationName,
+          temperature: weatherElements.TEMP,
+          windSpeed: weatherElements.WDSD,
+          description: '多雲時晴',
+          rainPossibility: 60,
+        });
       });
+  };
 
-};
-
-return (
-  <ThemeProvider theme={theme[currentTheme]}>
-    <Container>
-      <WeatherCard>
-        <Location>{currentWeather.locationName}</Location>
-        <Description>{currentWeather.description}</Description>
-        <CurrentWeather>
-          <Temperature>
-            {Math.round(currentWeather.temperature)} <Celsius>°C</Celsius>
-          </Temperature>
-          <DayCloudy />
-        </CurrentWeather>
-        <AirFlow>
-          <AirFlowIcon /> {currentWeather.windSpeed} m/h
-        </AirFlow>
-        <Rain>
-          <RainIcon /> {currentWeather.rainPossibility}%
-        </Rain>
-        <Refresh onClick={handleClick}>
-          最後觀測時間：
-          {new Intl.DateTimeFormat('zh-TW', {
-            hour: 'numeric',
-            minute: 'numeric',
-          }).format(dayjs(currentWeather.observationTime))}{' '}
-          <RefreshIcon />
-        </Refresh>
-      </WeatherCard>
-    </Container>
-  </ThemeProvider>
-);
+  return (
+    <ThemeProvider theme={theme[currentTheme]}>
+      <Container>
+        <WeatherCard>
+          <Location>{currentWeather.locationName}</Location>
+          <Description>{currentWeather.description}</Description>
+          <CurrentWeather>
+            <Temperature>
+              {Math.round(currentWeather.temperature)} <Celsius>°C</Celsius>
+            </Temperature>
+            <DayCloudy />
+          </CurrentWeather>
+          <AirFlow>
+            <AirFlowIcon /> {currentWeather.windSpeed} m/h
+          </AirFlow>
+          <Rain>
+            <RainIcon /> {currentWeather.rainPossibility}%
+          </Rain>
+          <Refresh onClick={handleClick}>
+            最後觀測時間：
+            {new Intl.DateTimeFormat('zh-TW', {
+              hour: 'numeric',
+              minute: 'numeric',
+            }).format(dayjs(currentWeather.observationTime))}{' '}
+            <RefreshIcon />
+          </Refresh>
+        </WeatherCard>
+      </Container>
+    </ThemeProvider>
+  );
 };
 
 export default App;
