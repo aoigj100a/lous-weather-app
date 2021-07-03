@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 
 // 載入圖示
@@ -146,7 +146,7 @@ const App = () => {
   const AUTHORIZATION_KEY = process.env.REACT_APP_AUTHORIZATION_KEY;
   const LOCATION_NAME = '%E8%87%BA%E5%8C%97';
 
-  const handleClick = () => {
+  const fetchCurrentWeather = () => {
     fetch(
       `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${AUTHORIZATION_KEY}&locationName=${LOCATION_NAME}`
     )
@@ -174,9 +174,15 @@ const App = () => {
           windSpeed: weatherElements.WDSD,
           description: '多雲時晴',
           rainPossibility: 60,
+          isLoding: true,
         });
       });
   };
+
+  // 加入 useEffect
+  useEffect(() => {
+    fetchCurrentWeather();
+  }, []);
 
   return (
     <ThemeProvider theme={theme[currentTheme]}>
@@ -196,7 +202,7 @@ const App = () => {
           <Rain>
             <RainIcon /> {currentWeather.rainPossibility}%
           </Rain>
-          <Refresh onClick={handleClick}>
+          <Refresh>
             最後觀測時間：
             {new Intl.DateTimeFormat('zh-TW', {
               hour: 'numeric',
