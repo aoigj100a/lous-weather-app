@@ -8,6 +8,7 @@ import { ReactComponent as RainIcon } from './images/rain.svg';
 import { ReactComponent as RefreshIcon } from './images/refresh.svg';
 
 import { ThemeProvider } from '@emotion/react';
+import dayjs from 'dayjs';
 
 const theme = {
   light: {
@@ -129,31 +130,46 @@ const Refresh = styled.div`
 
 const App = () => {
   const [currentTheme, setCurrentTheme] = useState('light');
+  
+  // 定義使用到的資料格式與狀態
+   const [currentWeather, setCurrentWeather] = useState({
+    locationName: '臺北市',
+    description: '多雲時晴',
+    windSpeed: 1.1,
+    temperature: 22.9,
+    rainPossibility: 48.3,
+    observationTime: '2020-12-12 22:10:00',
+  });
 
   return (
     <ThemeProvider theme={theme[currentTheme]}>
-      <Container>
-        <WeatherCard>
-          <Location>台北市</Location>
-          <Description>多雲時晴</Description>
-          <CurrentWeather>
-            <Temperature>
-              23 <Celsius>°C</Celsius>
-            </Temperature>
-            <DayCloudy />
-          </CurrentWeather>
-          <AirFlow>
-            <AirFlowIcon /> 23 m/h
-          </AirFlow>
-          <Rain>
-            <RainIcon /> 48%
-          </Rain>
-          <Refresh>
-            最後觀測時間：上午 12:03 <RefreshIcon />
-          </Refresh>
-        </WeatherCard>
-      </Container>
-    </ThemeProvider>
+    <Container>
+      <WeatherCard>
+        <Location>{currentWeather.locationName}</Location>
+        <Description>{currentWeather.description}</Description>
+        <CurrentWeather>
+          <Temperature>
+            {Math.round(currentWeather.temperature)} <Celsius>°C</Celsius>
+          </Temperature>
+          <DayCloudy />
+        </CurrentWeather>
+        <AirFlow>
+          <AirFlowIcon /> {currentWeather.windSpeed} m/h
+        </AirFlow>
+        <Rain>
+          <RainIcon /> {currentWeather.rainPossibility}%
+        </Rain>
+        <Refresh>
+          最後觀測時間：
+          {new Intl.DateTimeFormat('zh-TW', {
+            hour: 'numeric',
+            minute: 'numeric',
+          }).format(dayjs(currentWeather.observationTime))}{' '}
+          <RefreshIcon />
+        </Refresh>
+      </WeatherCard>
+    </Container>
+  </ThemeProvider>
   );
 };
 
