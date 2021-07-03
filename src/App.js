@@ -130,9 +130,9 @@ const Refresh = styled.div`
 
 const App = () => {
   const [currentTheme, setCurrentTheme] = useState('light');
-  
+
   // 定義使用到的資料格式與狀態
-   const [currentWeather, setCurrentWeather] = useState({
+  const [currentWeather, setCurrentWeather] = useState({
     locationName: '臺北市',
     description: '多雲時晴',
     windSpeed: 1.1,
@@ -141,8 +141,25 @@ const App = () => {
     observationTime: '2020-12-12 22:10:00',
   });
 
-  return (
-    <ThemeProvider theme={theme[currentTheme]}>
+  // 原生js fetch API拉取資料
+
+  const AUTHORIZATION_KEY = process.env.REACT_APP_AUTHORIZATION_KEY;
+  console.log(AUTHORIZATION_KEY)
+  const LOCATION_NAME = '%E8%87%BA%E5%8C%97';
+
+  const handleClick = () => {
+    fetch(
+      `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${AUTHORIZATION_KEY}&locationName=${LOCATION_NAME}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('data',data)
+      });
+
+};
+
+return (
+  <ThemeProvider theme={theme[currentTheme]}>
     <Container>
       <WeatherCard>
         <Location>{currentWeather.locationName}</Location>
@@ -159,7 +176,7 @@ const App = () => {
         <Rain>
           <RainIcon /> {currentWeather.rainPossibility}%
         </Rain>
-        <Refresh>
+        <Refresh onClick={handleClick}>
           最後觀測時間：
           {new Intl.DateTimeFormat('zh-TW', {
             hour: 'numeric',
@@ -170,7 +187,7 @@ const App = () => {
       </WeatherCard>
     </Container>
   </ThemeProvider>
-  );
+);
 };
 
 export default App;
