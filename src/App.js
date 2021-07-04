@@ -1,5 +1,7 @@
 import React, { useState, useEffect,useCallback } from 'react';
 import styled from '@emotion/styled';
+import { ThemeProvider } from '@emotion/react';
+import dayjs from 'dayjs';
 
 // 載入圖示
 import { ReactComponent as AirFlowIcon } from './images/airFlow.svg';
@@ -8,8 +10,8 @@ import { ReactComponent as LoadingIcon } from './images/loading.svg';
 import { ReactComponent as RainIcon } from './images/rain.svg';
 import { ReactComponent as RefreshIcon } from './images/refresh.svg';
 
-import { ThemeProvider } from '@emotion/react';
-import dayjs from 'dayjs';
+import WeatherIcon from './components/WeatherIcon';
+
 
 const theme = {
   light: {
@@ -257,7 +259,7 @@ const App = () => {
             <Temperature>
               {Math.round(temperature)} <Celsius>°C</Celsius>
             </Temperature>
-            <DayCloudy />
+            <WeatherIcon />
           </CurrentWeather>
           <AirFlow>
             <AirFlowIcon /> {windSpeed} m/h
