@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import styled from '@emotion/styled';
 
 // 載入圖示
@@ -198,7 +198,6 @@ const fetchWeatherForecast = () => {
 };
 
 const App = () => {
-  console.log('--- invoke function component ---');
   const [currentTheme, setCurrentTheme] = useState('light');
   const [weatherElement, setWeatherElement] = useState({
     observationTime: new Date(),
@@ -212,27 +211,27 @@ const App = () => {
     isLoading: true,
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setWeatherElement((prevState) => ({
-        ...prevState,
-        isLoading: true,
-      }));
+  const fetchData = useCallback(async () => {
+    setWeatherElement((prevState) => ({
+      ...prevState,
+      isLoading: true,
+    }));
 
-      const [currentWeather, weatherForecast] = await Promise.all([
-        fetchCurrentWeather(),
-        fetchWeatherForecast(),
-      ]);
+    const [currentWeather, weatherForecast] = await Promise.all([
+      fetchCurrentWeather(),
+      fetchWeatherForecast(),
+    ]);
 
-      setWeatherElement({
-        ...currentWeather,
-        ...weatherForecast,
-        isLoading: false,
-      });
-    };
-
-    fetchData();
+    setWeatherElement({
+      ...currentWeather,
+      ...weatherForecast,
+      isLoading: false,
+    });
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const {
     observationTime,
@@ -266,13 +265,7 @@ const App = () => {
           <Rain>
             <RainIcon /> {rainPossibility}%
           </Rain>
-          <Refresh
-            onClick={() => {
-              fetchCurrentWeather();
-              fetchWeatherForecast();
-            }}
-            isLoading={isLoading}
-          >
+          <Refresh onClick={fetchData} isLoading={isLoading}>
             最後觀測時間：
             {new Intl.DateTimeFormat('zh-TW', {
               hour: 'numeric',
@@ -287,4 +280,3 @@ const App = () => {
 };
 
 export default App;
-
