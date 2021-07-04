@@ -244,12 +244,12 @@ const App = () => {
     rainPossibility,
     isLoading,
     comfortability,
+    weatherCode,
   } = weatherElement;
 
   return (
     <ThemeProvider theme={theme[currentTheme]}>
       <Container>
-        {console.log('render, isLoading: ', isLoading)}
         <WeatherCard>
           <Location>{locationName}</Location>
           <Description>
@@ -259,7 +259,7 @@ const App = () => {
             <Temperature>
               {Math.round(temperature)} <Celsius>°C</Celsius>
             </Temperature>
-            <WeatherIcon />
+            <WeatherIcon weatherCode={weatherCode} moment="night" />
           </CurrentWeather>
           <AirFlow>
             <AirFlowIcon /> {windSpeed} m/h
