@@ -35,8 +35,6 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-
-
 const AUTHORIZATION_KEY = process.env.REACT_APP_AUTHORIZATION_KEY;
 const LOCATION_NAME = '%E8%87%BA%E5%8C%97';
 const LOCATION_NAME_FORECAST = '臺北市';
