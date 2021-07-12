@@ -94,7 +94,7 @@ const Save = styled.button`
 
 // WeatherSetting 元件 JSX 部分
 
-const WeatherSetting = () => {
+const WeatherSetting = ({ handleCurrentPageChange }) => {
   return (
     <WeatherSettingWrapper>
       <Title>設定</Title>
@@ -109,7 +109,7 @@ const WeatherSetting = () => {
       </StyledSelect>
 
       <ButtonGroup>
-        <Back>返回</Back>
+        <Back onClick={() => handleCurrentPageChange('WeatherCard')}>返回</Back>
         <Save>儲存</Save>
       </ButtonGroup>
     </WeatherSettingWrapper>

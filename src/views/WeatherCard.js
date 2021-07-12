@@ -110,7 +110,7 @@ const Cog = styled(CogIcon)`
   cursor: pointer;
 `;
 
-const WeatherCard = ({ weatherElement, moment, fetchData }) => {
+const WeatherCard = ({ weatherElement, moment, fetchData, handleCurrentPageChange }) => {
   const {
     observationTime,
     locationName,
@@ -125,7 +125,7 @@ const WeatherCard = ({ weatherElement, moment, fetchData }) => {
 
   return (
     <WeatherCardWrapper>
-      <Cog />
+      <Cog onClick={()=>handleCurrentPageChange('WeatherSetting')}/>
       <Location>{locationName}</Location>
       <Description>
         {description} {comfortability}
