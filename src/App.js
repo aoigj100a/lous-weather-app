@@ -5,6 +5,7 @@ import { getMoment } from './utils/helpers';
 import useWeatherAPI from './hooks/useWeatherAPI';
 
 import WeatherCard from './views/WeatherCard';
+import WeatherSetting from './views/WeatherSetting';
 
 
 const theme = {
@@ -40,6 +41,7 @@ const LOCATION_NAME = '%E8%87%BA%E5%8C%97';
 const LOCATION_NAME_FORECAST = '臺北市';
 
 const App = () => {
+  const [currentPage, setCurrentPage] = useState('WeatherCard');
   const [weatherElement, fetchData] = useWeatherAPI({
     locationName: LOCATION_NAME,
     cityName: LOCATION_NAME_FORECAST,
@@ -56,11 +58,17 @@ const App = () => {
   return (
     <ThemeProvider theme={theme[currentTheme]}>
       <Container>
-        <WeatherCard
-          weatherElement={weatherElement}
-          moment={moment}
-          fetchData={fetchData}
-        />
+        {currentPage === 'WeatherCard' && (
+          <WeatherCard
+            weatherElement={weatherElement}
+            moment={moment}
+            fetchData={fetchData}
+          />
+        )}
+
+        {currentPage === 'WeatherSetting' && (
+          <WeatherSetting />
+        )}
       </Container>
     </ThemeProvider>
   );
