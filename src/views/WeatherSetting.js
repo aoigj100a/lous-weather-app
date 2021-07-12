@@ -1,8 +1,7 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import { availableLocations } from './../utils/helpers';
+import React, { useState } from 'react';
 
-// WeatherSetting 元件 Styled Components 部分
+import { availableLocations } from './../utils/helpers';
+import styled from '@emotion/styled';
 
 const WeatherSettingWrapper = styled.div`
   position: relative;
@@ -92,15 +91,28 @@ const Save = styled.button`
   }
 `;
 
-// WeatherSetting 元件 JSX 部分
-
 const WeatherSetting = ({ handleCurrentPageChange }) => {
+  const [locationName, setLocationName] = useState('臺北市');
+
+  const handleChange = (e) => {
+    setLocationName(e.target.value);
+  };
+
+  const handleSave = () => {
+    console.log('locationName', locationName);
+  };
+
   return (
     <WeatherSettingWrapper>
       <Title>設定</Title>
       <StyledLabel htmlFor="location">地區</StyledLabel>
 
-      <StyledSelect id="location" name="location">
+      <StyledSelect
+        id="location"
+        name="location"
+        onChange={handleChange}
+        value={locationName}
+      >
         {availableLocations.map(({ cityName }) => (
           <option value={cityName} key={cityName}>
             {cityName}
@@ -110,7 +122,7 @@ const WeatherSetting = ({ handleCurrentPageChange }) => {
 
       <ButtonGroup>
         <Back onClick={() => handleCurrentPageChange('WeatherCard')}>返回</Back>
-        <Save>儲存</Save>
+        <Save onClick={handleSave}>儲存</Save>
       </ButtonGroup>
     </WeatherSettingWrapper>
   );
