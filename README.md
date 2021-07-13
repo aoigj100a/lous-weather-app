@@ -11,6 +11,7 @@
 6. testing-library/jest-dom v5.11.12
 7. testing-library/react v11.2.7
 8. testing-library/user-event v12.8.3
+9. gh-pages v.2.3
 
 ## 安裝與執行步驟 (Installation and Execution)
 1. 將專案複製到本機 (兩種方法)
