@@ -39,7 +39,9 @@ const Container = styled.div`
 const AUTHORIZATION_KEY = process.env.REACT_APP_AUTHORIZATION_KEY;
 
 const App = () => {
-  const [currentCity, setCurrentCity] = useState('高雄市');
+  // 抓localStorage的cityName檔預設值
+  const storageCity = localStorage.getItem('cityName') || "高雄市";
+  const [currentCity, setCurrentCity] = useState(storageCity);
   const [currentPage, setCurrentPage] = useState('WeatherCard');
 
   // 包裝
@@ -71,7 +73,7 @@ const App = () => {
       <Container>
         {currentPage === 'WeatherCard' && (
           <WeatherCard
-            cityName={ cityName }
+            cityName={cityName}
             weatherElement={weatherElement}
             moment={moment}
             fetchData={fetchData}
@@ -80,10 +82,10 @@ const App = () => {
         )}
 
         {currentPage === 'WeatherSetting' && (
-          <WeatherSetting 
-          handleCurrentPageChange={handleCurrentPageChange}
-          handleCurrentCityChange={handleCurrentCityChange}
-           />
+          <WeatherSetting
+            handleCurrentPageChange={handleCurrentPageChange}
+            handleCurrentCityChange={handleCurrentCityChange}
+          />
         )}
       </Container>
     </ThemeProvider>
